@@ -1,3 +1,4 @@
+.husky
 build
 cdk.out
 .cdk.staging
