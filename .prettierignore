@@ -1,7 +1,7 @@
-package-lock.json
-
 .husky
 build
 cdk.out
 .cdk.staging
 node_modules
+
+package-lock.json
