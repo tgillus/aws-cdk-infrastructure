@@ -4,11 +4,11 @@ import {
   MatchStyle,
 } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import { AwsCdkInfrastructureStack } from '../../lib/stacks/aws-cdk-infrastructure-stack';
+import { StorageStack } from '../../lib/stacks/storage-stack';
 
 test.skip('Empty Stack', () => {
   const app = new cdk.App();
-  const stack = new AwsCdkInfrastructureStack(app, 'MyTestStack');
+  const stack = new StorageStack(app, 'StorageStack');
 
   expectCDK(stack).to(
     matchTemplate(
