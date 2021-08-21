@@ -15,14 +15,14 @@ export class EmployeeBonusStack extends cdk.Stack {
   ) {
     super(scope, id, props);
 
-    const bonusIntegration = new EmployeeBonusIntegration(
+    const employeeBonusIntegration = new EmployeeBonusIntegration(
       this,
       'EmployeeBonusIntegration'
     );
 
     new EmployeeBonusApi(this, 'EmployeeBonusApi', {
       deploymentArtifactsBucket: props.deploymentArtifactsBucket,
-      saveBonusTopic: bonusIntegration.saveBonusTopic,
+      saveBonusTopic: employeeBonusIntegration.saveBonusTopic,
     });
   }
 }
