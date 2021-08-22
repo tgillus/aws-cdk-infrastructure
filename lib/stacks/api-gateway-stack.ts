@@ -19,8 +19,15 @@ export class ApiGatewayStack extends cdk.Stack {
     const compensation = api.root.addResource('compensation');
     const messages = compensation.addResource('messages');
 
+    const employeeNumber = compensation.addResource('{employeeNumber}');
+    const employeeBonus = employeeNumber.addResource('messages');
+    employeeBonus.addMethod(
+      'GET',
+      new apigw.LambdaIntegration(props.employeeBonusApiFunction)
+    );
+
     messages.addMethod(
-      'ANY',
+      'GET',
       new apigw.LambdaIntegration(props.employeeBonusApiFunction, {
         proxy: true,
       })
