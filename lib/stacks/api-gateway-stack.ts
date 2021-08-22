@@ -1,8 +1,12 @@
 import * as cdk from '@aws-cdk/core';
 import * as apigw from '@aws-cdk/aws-apigateway';
+import * as lambda from '@aws-cdk/aws-lambda';
 
+export interface ApiGatewayStackProps extends cdk.StackProps {
+  employeeBonusApiFunction: lambda.IFunction;
+}
 export class ApiGatewayStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: cdk.Construct, id: string, props: ApiGatewayStackProps) {
     super(scope, id, props);
 
     const api = new apigw.RestApi(this, 'ApiGateway', {
@@ -11,5 +15,20 @@ export class ApiGatewayStack extends cdk.Stack {
       },
     });
     api.root.addMethod('ANY');
+
+    const compensation = api.root.addResource('compensation');
+    const messages = compensation.addResource('messages');
+
+    messages.addMethod(
+      'ANY',
+      new apigw.LambdaIntegration(props.employeeBonusApiFunction, {
+        proxy: true,
+      })
+    );
+    messages.addProxy({
+      defaultIntegration: new apigw.LambdaIntegration(
+        props.employeeBonusApiFunction
+      ),
+    });
   }
 }

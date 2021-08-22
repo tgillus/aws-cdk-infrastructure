@@ -9,7 +9,13 @@ import { ApiGatewayStack } from '../lib/stacks/api-gateway-stack';
 const app = new cdk.App();
 new NetworkingStack(app, 'NetworkingStack');
 const { deploymentArtifactsBucket } = new StorageStack(app, 'StorageStack');
-new ApiGatewayStack(app, 'ApiGatewayStack');
-new EmployeeBonusStack(app, 'EmployeeBonusStack', {
-  deploymentArtifactsBucket,
+const { employeeBonusApiFunction } = new EmployeeBonusStack(
+  app,
+  'EmployeeBonusStack',
+  {
+    deploymentArtifactsBucket,
+  }
+);
+new ApiGatewayStack(app, 'ApiGatewayStack', {
+  employeeBonusApiFunction,
 });
