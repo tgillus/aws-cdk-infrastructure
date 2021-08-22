@@ -27,7 +27,6 @@ export class EmployeeBonusApi extends cdk.Construct {
       handler: 'build/lambda.handler',
       environment: {
         NODE_OPTIONS: '--enable-source-maps',
-        LOGGING_LEVEL: 'debug',
         SAVE_EMPLOYEE_BONUS_SNS_TOPIC: props.saveBonusTopic.topicArn,
       },
       logRetention: RetentionDays.ONE_DAY,
