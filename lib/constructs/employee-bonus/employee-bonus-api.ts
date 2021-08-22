@@ -15,7 +15,7 @@ export class EmployeeBonusApi extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: EmployeeBonusApiProps) {
     super(scope, id);
 
-    const artifactVersion = '0.4.0';
+    const artifactVersion = '0.6.0';
     const artifactKey = `employee-bonus/employee-bonus-api-${artifactVersion}.zip`;
 
     this.lambdaFunction = new lambda.Function(this, 'WebFunction', {
