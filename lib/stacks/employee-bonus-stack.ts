@@ -1,7 +1,6 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
-import * as lamdbda from '@aws-cdk/aws-lambda';
-import { EmployeeBonusApi } from '../constructs/employee-bonus/employee-bonus-api';
+import { EmployeeBonusApiFunction } from '../constructs/employee-bonus/employee-bonus-api-function';
 import { EmployeeBonusIntegration } from '../constructs/employee-bonus/employee-bonus-integration';
 
 export interface EmployeeBonusStackProps extends cdk.StackProps {
@@ -9,7 +8,7 @@ export interface EmployeeBonusStackProps extends cdk.StackProps {
 }
 
 export class EmployeeBonusStack extends cdk.Stack {
-  public readonly employeeBonusApiFunction: lamdbda.IFunction;
+  public readonly employeeBonusApiFunctionArn: string;
 
   constructor(
     scope: cdk.Construct,
@@ -22,14 +21,13 @@ export class EmployeeBonusStack extends cdk.Stack {
       this,
       'EmployeeBonusIntegration'
     );
-
-    this.employeeBonusApiFunction = new EmployeeBonusApi(
+    this.employeeBonusApiFunctionArn = new EmployeeBonusApiFunction(
       this,
       'EmployeeBonusApi',
       {
         deploymentArtifactsBucket: props.deploymentArtifactsBucket,
         saveBonusTopic: employeeBonusIntegration.saveBonusTopic,
       }
-    ).employeeBonusApiFunction;
+    ).functionArn;
   }
 }

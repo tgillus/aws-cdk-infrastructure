@@ -4,21 +4,25 @@ import * as s3 from '@aws-cdk/aws-s3';
 import * as sns from '@aws-cdk/aws-sns';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 
-export interface EmployeeBonusApiProps {
+export interface EmployeeBonusApiFunctionProps {
   deploymentArtifactsBucket: s3.IBucket;
   saveBonusTopic: sns.ITopic;
 }
 
-export class EmployeeBonusApi extends cdk.Construct {
-  public readonly employeeBonusApiFunction: lambda.IFunction;
+export class EmployeeBonusApiFunction extends cdk.Construct {
+  public readonly functionArn: string;
 
-  constructor(scope: cdk.Construct, id: string, props: EmployeeBonusApiProps) {
+  constructor(
+    scope: cdk.Construct,
+    id: string,
+    props: EmployeeBonusApiFunctionProps
+  ) {
     super(scope, id);
 
     const artifactVersion = '0.6.0';
     const artifactKey = `employee-bonus/employee-bonus-api-${artifactVersion}.zip`;
 
-    this.employeeBonusApiFunction = new lambda.Function(this, 'WebFunction', {
+    const employeeBonusApiFunction = new lambda.Function(this, 'WebFunction', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromBucket(
         props.deploymentArtifactsBucket,
@@ -31,13 +35,14 @@ export class EmployeeBonusApi extends cdk.Construct {
       },
       logRetention: RetentionDays.ONE_DAY,
     });
+    this.functionArn = employeeBonusApiFunction.functionArn;
 
-    cdk.Tags.of(this.employeeBonusApiFunction).add(
+    cdk.Tags.of(employeeBonusApiFunction).add(
       'Name',
       'EmployeeBonusWebFunction'
     );
-    cdk.Tags.of(this.employeeBonusApiFunction).add('Version', artifactVersion);
+    cdk.Tags.of(employeeBonusApiFunction).add('Version', artifactVersion);
 
-    props.saveBonusTopic.grantPublish(this.employeeBonusApiFunction);
+    props.saveBonusTopic.grantPublish(employeeBonusApiFunction);
   }
 }
