@@ -1,16 +1,16 @@
 import * as cdk from '@aws-cdk/core';
 import * as apigw from '@aws-cdk/aws-apigateway';
+import * as lambda from '@aws-cdk/aws-lambda';
 import { EmployeeBonusApiStack } from './employee-bonus-api-stack';
 
 export interface ResourceNestedStackProps extends cdk.NestedStackProps {
   readonly restApiId: string;
   readonly rootResourceId: string;
-  readonly employeeBonusApiFunctionArn: string;
   readonly compensationResourceId: string;
 }
 
 export interface ApiGatewayStackProps extends cdk.StackProps {
-  employeeBonusApiFunctionArn: string;
+  employeeBonusApiFunction: lambda.IFunction;
 }
 
 export class ApiGatewayStack extends cdk.Stack {
@@ -29,7 +29,7 @@ export class ApiGatewayStack extends cdk.Stack {
     new EmployeeBonusApiStack(this, {
       restApiId: api.restApiId,
       rootResourceId: api.restApiRootResourceId,
-      employeeBonusApiFunctionArn: props.employeeBonusApiFunctionArn,
+      apiFunction: props.employeeBonusApiFunction,
       compensationResourceId: compensation.resourceId,
     });
   }

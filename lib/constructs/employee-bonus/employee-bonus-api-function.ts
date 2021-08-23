@@ -10,7 +10,7 @@ export interface EmployeeBonusApiFunctionProps {
 }
 
 export class EmployeeBonusApiFunction extends cdk.Construct {
-  public readonly functionArn: string;
+  public readonly apiFunction: lambda.IFunction;
 
   constructor(
     scope: cdk.Construct,
@@ -22,7 +22,7 @@ export class EmployeeBonusApiFunction extends cdk.Construct {
     const artifactVersion = '0.6.0';
     const artifactKey = `employee-bonus/employee-bonus-api-${artifactVersion}.zip`;
 
-    const employeeBonusApiFunction = new lambda.Function(this, 'WebFunction', {
+    this.apiFunction = new lambda.Function(this, 'WebFunction', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromBucket(
         props.deploymentArtifactsBucket,
@@ -35,14 +35,10 @@ export class EmployeeBonusApiFunction extends cdk.Construct {
       },
       logRetention: RetentionDays.ONE_DAY,
     });
-    this.functionArn = employeeBonusApiFunction.functionArn;
 
-    cdk.Tags.of(employeeBonusApiFunction).add(
-      'Name',
-      'EmployeeBonusWebFunction'
-    );
-    cdk.Tags.of(employeeBonusApiFunction).add('Version', artifactVersion);
+    cdk.Tags.of(this.apiFunction).add('Name', 'EmployeeBonusWebFunction');
+    cdk.Tags.of(this.apiFunction).add('Version', artifactVersion);
 
-    props.saveBonusTopic.grantPublish(employeeBonusApiFunction);
+    props.saveBonusTopic.grantPublish(this.apiFunction);
   }
 }
