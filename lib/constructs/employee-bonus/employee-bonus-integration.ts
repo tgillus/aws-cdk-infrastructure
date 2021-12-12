@@ -1,16 +1,19 @@
-import * as cdk from '@aws-cdk/core';
-import * as sns from '@aws-cdk/aws-sns';
-import * as sqs from '@aws-cdk/aws-sqs';
-import * as subs from '@aws-cdk/aws-sns-subscriptions';
+import {
+  aws_sns as sns,
+  aws_sqs as sqs,
+  aws_sns_subscriptions as subs,
+  Duration,
+} from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
-export class EmployeeBonusIntegration extends cdk.Construct {
+export class EmployeeBonusIntegration extends Construct {
   readonly saveBonusTopic: sns.ITopic;
 
-  constructor(scope: cdk.Construct, id: string) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     const saveBonusQueue = new sqs.Queue(this, 'SaveBonusQueue', {
-      retentionPeriod: cdk.Duration.days(1),
+      retentionPeriod: Duration.days(1),
     });
 
     this.saveBonusTopic = new sns.Topic(this, 'SaveBonusTopic');

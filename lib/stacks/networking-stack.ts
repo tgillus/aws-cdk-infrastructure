@@ -1,8 +1,8 @@
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from '@aws-cdk/aws-ec2';
+import { Construct } from 'constructs';
+import { aws_ec2 as ec2, Stack, StackProps } from 'aws-cdk-lib';
 
-export class NetworkingStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+export class NetworkingStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     new ec2.Vpc(this, 'Vpc', {

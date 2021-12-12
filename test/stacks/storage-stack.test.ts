@@ -3,11 +3,11 @@ import {
   matchTemplate,
   MatchStyle,
 } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
+import { App } from 'aws-cdk-lib';
 import { StorageStack } from '../../lib/stacks/storage-stack';
 
 test.skip('Empty Stack', () => {
-  const app = new cdk.App();
+  const app = new App();
   const stack = new StorageStack(app, 'StorageStack');
 
   expectCDK(stack).to(

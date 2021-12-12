@@ -1,10 +1,16 @@
-import * as cdk from '@aws-cdk/core';
-import * as s3 from '@aws-cdk/aws-s3';
+import {
+  aws_s3 as s3,
+  RemovalPolicy,
+  Stack,
+  StackProps,
+  Tags,
+} from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
-export class StorageStack extends cdk.Stack {
+export class StorageStack extends Stack {
   public deploymentArtifactsBucket: s3.IBucket;
 
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     this.deploymentArtifactsBucket = new s3.Bucket(
@@ -13,11 +19,11 @@ export class StorageStack extends cdk.Stack {
       {
         encryption: s3.BucketEncryption.S3_MANAGED,
         autoDeleteObjects: true,
-        removalPolicy: cdk.RemovalPolicy.DESTROY,
+        removalPolicy: RemovalPolicy.DESTROY,
       }
     );
 
-    cdk.Tags.of(this.deploymentArtifactsBucket).add(
+    Tags.of(this.deploymentArtifactsBucket).add(
       'Name',
       'DeploymentArtifactsBucket'
     );
